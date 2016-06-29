@@ -36,4 +36,5 @@ CMakeCache.txt
 CMakeFiles
 Makefile
 bin
+install_manifest.txt
 !games/preview/meshes/*.obj
