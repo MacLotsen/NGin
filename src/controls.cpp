@@ -18,11 +18,14 @@
 
 #include "controls.h"
 
+// freeglut forgot something -.-
+#define GLUT_WHEEL_UP   3
+#define GLUT_WHEEL_DOWN 4
+
 #define ESC 27
 
-#define BUTTON_LEFT     1
-#define BUTTON_RIGHT    2
-#define BUTTON_SCROLL   4
+#define BUTTON_LEFT  1
+#define BUTTON_RIGHT 2
 
 #define FORWARD  8
 #define BACKWARD 16
@@ -31,7 +34,8 @@
 #define UPWARD   128
 #define DOWNWARD 256
 
-int state;
+int scroll_buffer;
+unsigned int state;
 
 const glm::vec3 UP(0,1,0), SCALE(.1f);
 
@@ -76,8 +80,12 @@ void mouseClick(int btn, int btnState, int x, int y) {
         state ^= BUTTON_RIGHT;
     }
 
-    if (btn == GLUT_MIDDLE_BUTTON) {
-        state ^= BUTTON_SCROLL;
+    if (btn == GLUT_WHEEL_UP) {
+        scroll_buffer += btnState;
+    }
+
+    if (btn == GLUT_WHEEL_DOWN) {
+        scroll_buffer -= btnState;
     }
 
     prevMouseMovement = glm::vec2(x,y);
@@ -100,8 +108,6 @@ void mouseMove(int x, int y, Camera &camera) {
 
     } else if ((state & BUTTON_RIGHT) == BUTTON_RIGHT) {
 
-    } else if ((state & BUTTON_SCROLL) == BUTTON_SCROLL) {
-        camera.dist = max(camera.dist - (prevMouseMovement.y - y) * .1f, 0.0f);
     }
 
     prevMouseMovement = glm::vec2(x,y);
@@ -132,6 +138,14 @@ void updateCamera(Camera &c) {
 
     if ((state & DOWNWARD) == DOWNWARD) {
         c.pos -= UP * SCALE;
+    }
+
+    if (scroll_buffer > 0) {
+        scroll_buffer--;
+        c.dist *= 1.01f;
+    } else if (scroll_buffer < 0) {
+        scroll_buffer++;
+        c.dist *= 0.99f;
     }
 
 }
