@@ -21,6 +21,6 @@ install:
   - if [ "$CXX" = "g++" ]; then export CXX="g++-4.9" CC="gcc-4.9"; fi
 
 script:
-  cmake .
-  make -j4
-  ctest --output-on-failure
+  - cmake .
+  - make -j4
+  - ctest --output-on-failure
