@@ -10,8 +10,8 @@ addons:
     packages:
       - cmake
       - cmake-data
-      - gcc-4.9
-      - g++-4.9
+      - gcc
+      - g++
       - libglew-dev
       - libglm-dev
       - freeglut3-dev
