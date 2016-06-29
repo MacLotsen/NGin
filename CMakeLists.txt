@@ -37,7 +37,9 @@ add_executable(preview src/main.cpp)
 target_link_libraries(ngin  ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} ${GLEW_LIBRARIES})
 target_link_libraries(preview  ngin)
 
-install(FILES include/ngin.h DESTINATION include)
+install(DIRECTORY include DESTINATION .)
+install(DIRECTORY share DESTINATION .)
+install(DIRECTORY games DESTINATION .)
 install(TARGETS ngin preview
         RUNTIME DESTINATION bin
         LIBRARY DESTINATION lib
