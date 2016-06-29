@@ -4,6 +4,7 @@ project(NGin)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 # export with UNIX dir structure
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
@@ -36,4 +37,8 @@ add_executable(preview src/main.cpp)
 target_link_libraries(ngin  ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} ${GLEW_LIBRARIES})
 target_link_libraries(preview  ngin)
 
-file(COPY share/ DESTINATION share)
+install(FILES include/ngin.h DESTINATION include)
+install(TARGETS ngin preview
+        RUNTIME DESTINATION bin
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib)
