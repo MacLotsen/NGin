@@ -36,5 +36,7 @@ CMakeCache.txt
 CMakeFiles
 Makefile
 bin
+Testing
+CTestTestfile.cmake
 install_manifest.txt
 !games/preview/meshes/*.obj
