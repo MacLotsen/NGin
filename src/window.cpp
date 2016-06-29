@@ -108,7 +108,6 @@ void parse_config() {
             parse_keys(f);
         }
 
-        cout << UI::window.title << endl;
         fclose(f);
     }
 }
@@ -119,8 +118,11 @@ void NGin::init(int argc, char** argv, std::string game) {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
     glutInitWindowPosition(0, 0);
-    glutInitWindowSize(800, 600);
+    glutInitWindowSize(UI::window.resolution.first, UI::window.resolution.second);
     glutCreateWindow(UI::window.title.c_str());
+    if (UI::window.fullscreen) {
+        glutFullScreen();
+    }
 
     glutSetCursor(GLUT_CURSOR_NONE);
     initOutput();
