@@ -12,6 +12,7 @@ find_package(OpenGL REQUIRED)
 find_package(glm REQUIRED)
 find_package(GLUT REQUIRED)
 find_package(GLEW REQUIRED)
+find_package(GTest REQUIRED)
 
 include_directories(${GLUT_INCLUDE_DIRS})
 link_directories(${GLUT_LIBRARY_DIRS})
@@ -20,6 +21,8 @@ add_definitions(${GLUT_DEFINITIONS})
 include_directories(${GLEW_INCLUDE_DIRS})
 link_directories(${GLEW_LIBRARY_DIRS})
 add_definitions(${GLEW_DEFINITIONS})
+
+include_directories(${GTEST_INCLUDE_DIRS})
 
 set(ENGINE_SRC
         src/shader.cpp
@@ -32,15 +35,23 @@ set(ENGINE_SRC
 include_directories(include)
 
 add_library(ngin ${ENGINE_SRC})
-add_executable(preview src/main.cpp)
+add_executable(ngin_preview src/main.cpp)
+add_executable(tests
+        test/main.cpp)
 
 target_link_libraries(ngin  ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} ${GLEW_LIBRARIES})
-target_link_libraries(preview  ngin)
+target_link_libraries(ngin_preview  ngin)
+target_link_libraries(tests ${GTEST_LIBRARIES} ngin)
+
+enable_testing()
+add_test(NAME tests
+        COMMAND bin/tests
+        )
 
 install(DIRECTORY include DESTINATION .)
 install(DIRECTORY share DESTINATION .)
 install(DIRECTORY games DESTINATION .)
-install(TARGETS ngin preview
+install(TARGETS ngin ngin_preview
         RUNTIME DESTINATION bin
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib)

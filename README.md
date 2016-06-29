@@ -10,6 +10,7 @@ A C/C++ OpenGL Game Engine
  
 #### DEPENDENCIES BUIDLING
  - [CMake](https://cmake.org/)
+ - [GTest](https://github.com/google/googletest)
 
 ### INSTALLATION
 It is not registered in any package manager... Have a happy time building!
