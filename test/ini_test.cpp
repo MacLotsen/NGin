@@ -16,32 +16,13 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef NGIN_OUTPUT_H
-#define NGIN_OUTPUT_H
+#include <gtest/gtest.h>
+#include "../src/ini_parser.h"
 
-#include "controls.h"
-#include <map>
-#include <tuple>
+#define PARSE parse_ini("games/preview/config.ini")
 
-namespace Output {
-
-    struct KeyEvent {
-        char key;
-    };
-
-    enum MouseEvent {
-        LEFT_MOUSE_CLICK,
-        RIGHT_MOUSE_CLICK,
-        MIDDLE_MOUSE_CLICK,
-        SCROLL
-    };
-
-    //TODO are parameters actually needed?
-    typedef void (*output_f) (Camera&, const KeyEvent*);
-
-    extern std::map<KeyEvent*, output_f> key_registry;
-    extern std::map<KeyEvent*, std::pair<MouseEvent, output_f>> mouse_registry;
-
+TEST(Ini, Parser) {
+    ASSERT_NO_THROW(PARSE);
+    ini_map_t result = PARSE;
+    ASSERT_TRUE(result["WINDOW"]["title"] != "");
 }
-
-#endif //NGIN_OUTPUT_H

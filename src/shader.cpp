@@ -16,7 +16,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <ngin.h>
+#include <ngin/shader.h>
+#include <map>
 #include "init.h"
 
 using namespace NGin;
@@ -82,7 +83,7 @@ struct shader_pair_t {
 std::map<const shader_flag_t, Util::ShaderProgram*> _shaders;
 
 /*
- * don't forget to add a handle in ngin.h
+ * don't forget to add a handle in shader.h
  */
 const struct shader_pair_t _shader_paths[] = {
         {"share/ngin/shaders/shader.vert", "share/ngin/shaders/shader.frag"}

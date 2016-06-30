@@ -16,9 +16,12 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <ngin.h>
+#include <ngin/ngin.h>
+#include <ngin/model.h>
+#include "registry.h"
 #include <fstream>
 #include <cstring>
+#include <vector>
 
 using namespace NGin;
 
