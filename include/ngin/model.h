@@ -16,24 +16,13 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef NGIN_H
-#define NGIN_H
+#ifndef NGIN_MODEL_H
+#define NGIN_MODEL_H
 
-#include <map>
-#include <tuple>
-#include <vector>
-#include <GL/glew.h>
-#include <glm/glm.hpp>
+#include "./shader.h"
 #include <glm/gtx/quaternion.hpp>
 
-#define NGIN_SHADER_OBJECT_SHADER 1
-
 namespace NGin {
-
-    /**
-     * Change type when using more than 8 shaders
-     */
-    typedef unsigned char shader_flag_t;
 
     namespace Model {
 
@@ -76,39 +65,6 @@ namespace NGin {
         };
     }
 
-    namespace Registry {
-
-        template<typename T>
-        struct Register {
-
-            typedef struct {
-                std::string path;
-                T* value = nullptr;
-            } Record;
-            std::map<std::string, Record> records;
-        };
-
-        extern Register<Model::Mesh>       meshes;
-        extern Register<Model::Object3D>   objects;
-    }
-
-    namespace Util {
-
-        struct ShaderProgram {
-            const shader_flag_t flag;
-            GLuint program;
-            GLuint vertex;
-            GLuint fragment;
-
-            ShaderProgram(shader_flag_t _flag) : flag(_flag) {}
-        };
-
-        const ShaderProgram& getShader(const shader_flag_t index);
-
-    }
-
-    void init(int argc, char **argv, std::string game = "preview");
-
 }
 
-#endif //NGIN_H
+#endif //NGIN_MODEL_H

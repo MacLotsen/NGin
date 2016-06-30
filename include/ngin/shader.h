@@ -16,15 +16,35 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <ngin/ngin.h>
-#include <ngin/model.h>
-#include <glm/ext.hpp>
+#ifndef NGIN_SHADER_H
+#define NGIN_SHADER_H
 
-using namespace NGin;
+#include <GL/glew.h>
 
-void Model::setMaterial (const Model::Material &material, const GLuint shader) {
-    glUniform3fv(glGetUniformLocation(shader, "ambient"), 1, glm::value_ptr(material.ambient));
-    glUniform3fv(glGetUniformLocation(shader, "diffuse"), 1, glm::value_ptr(material.diffuse));
-    glUniform3fv(glGetUniformLocation(shader, "specular"), 1, glm::value_ptr(material.specular));
-    glUniform1f(glGetUniformLocation(shader, "power"), material.power);
+#define NGIN_SHADER_OBJECT_SHADER 1
+
+namespace NGin {
+
+    /**
+     * Change type when using more than 8 shaders
+     */
+    typedef unsigned char shader_flag_t;
+
+    namespace Util {
+
+        struct ShaderProgram {
+            const shader_flag_t flag;
+            GLuint program;
+            GLuint vertex;
+            GLuint fragment;
+
+            ShaderProgram(shader_flag_t _flag) : flag(_flag) {}
+        };
+
+        const ShaderProgram& getShader(const shader_flag_t index);
+
+    }
+
 }
+
+#endif //NGIN_SHADER_H

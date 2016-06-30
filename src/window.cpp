@@ -16,15 +16,18 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <ngin.h>
-#include "init.h"
-
+#include <GL/glew.h>
 #include <GL/freeglut.h>
+#include <ngin/window.h>
+#include "init.h"
+#include "registry.h"
 #include <iostream>
 
-using namespace std;
 
-UI::Window UI::window;
+using namespace std;
+using namespace NGin;
+
+UI::Window Registry::window;
 
 string getSection(FILE* f, bool open = false) {
     char c = fgetc(f);
@@ -64,7 +67,7 @@ void parse_window(FILE* f) {
     if (key == "[") {
         return;
     } else if (key == "title") {
-        UI::window.title = getValue(f);
+        Registry::window.title = getValue(f);
     } else if (key == "resolution") {
         bool passedX;
         string w, h;
@@ -78,10 +81,10 @@ void parse_window(FILE* f) {
             else
                 w += c;
         }
-        UI::window.resolution.first = stoi(w);
-        UI::window.resolution.second = stoi(h);
+        Registry::window.resolution.first = stoi(w);
+        Registry::window.resolution.second = stoi(h);
     } else if (key == "fullscreen") {
-        UI::window.fullscreen = (getValue(f) != "0");
+        Registry::window.fullscreen = (getValue(f) != "0");
     }
     return parse_window(f);
 }
@@ -112,22 +115,13 @@ void parse_config() {
     }
 }
 
-void NGin::init(int argc, char** argv, std::string game) {
+void initWindow() {
     parse_config();
-
-    glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
     glutInitWindowPosition(0, 0);
-    glutInitWindowSize(UI::window.resolution.first, UI::window.resolution.second);
-    glutCreateWindow(UI::window.title.c_str());
-    if (UI::window.fullscreen) {
+    glutInitWindowSize(Registry::window.resolution.first, Registry::window.resolution.second);
+    glutCreateWindow(Registry::window.title.c_str());
+    if (Registry::window.fullscreen) {
         glutFullScreen();
     }
-
-    glutSetCursor(GLUT_CURSOR_NONE);
-    initOutput();
-
-    glewInit();
-
-    initShaders();
 }

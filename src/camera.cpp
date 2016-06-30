@@ -16,52 +16,57 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <GL/glew.h>
+#include <GL/freeglut.h>
+#include <ngin/io.h>
 #include <iostream>
-#include "output.h"
+#include "registry.h"
 
-using namespace Output;
+using namespace NGin::IO;
 
-std::map<KeyEvent*, output_f> Output::key_registry;
-std::map<KeyEvent*, std::pair<MouseEvent, output_f>> Output::mouse_registry;
+std::map<KeyEvent*, std::pair<MouseEvent, output_f>> Registry::mouse_registry;
 
-void forward(Camera&, const KeyEvent*) {
+void pitch() {
+
+}
+
+void yaw() {
+
+}
+
+void roll() {
+
+}
+
+//TODO move to keyboard
+
+void forward() {
     std::cout << "FORWAAAARD!!" << std::endl;
 }
 
-void backward(Camera&, const KeyEvent*) {
+void backward() {
 
 }
 
-void left(Camera&, const KeyEvent*) {
+void left() {
 
 }
 
-void right(Camera&, const KeyEvent*) {
+void right() {
 
 }
 
-void up(Camera&, const KeyEvent*) {
+void up() {
 
 }
 
-void down(Camera&, const KeyEvent*) {
+void down() {
 
 }
 
-void pitch(Camera&, const KeyEvent*) {
-
-}
-
-void yaw(Camera&, const KeyEvent*) {
-
-}
-
-void roll(Camera&, const KeyEvent*) {
-
-}
-
-void initOutput() {
+void initCamera() {
+    glutSetCursor(GLUT_CURSOR_NONE);
     KeyEvent* k = new KeyEvent;
     k->key = 'w';
-    key_registry[k] = forward;
+    Registry::key_registry[k] = forward;
 }

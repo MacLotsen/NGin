@@ -16,13 +16,13 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <ngin.h>
-#include <glm/ext.hpp>
-//TODO Window/Util namespace
+#include <GL/glew.h>
 #include <GL/freeglut.h>
+#include <ngin/ngin.h>
+#include <glm/ext.hpp>
 
 #include "default_values.h"
-#include "output.h"
+#include "registry.h"
 
 using namespace std;
 using namespace NGin;
@@ -99,9 +99,9 @@ void draw() {
 
 void keyPress(unsigned char key, int, int) {
     keyPress(key);
-    for (auto record : Output::key_registry) {
-        if ((unsigned char)record.first->key == key) {
-            record.second(camera, record.first);
+    for (auto record : Registry::key_registry) {
+        if (record.first->key == key) {
+            record.second();
         }
     }
 }
@@ -112,31 +112,20 @@ void mouseMove(int x, int y) {
 }
 
 void special_key(int i, int x, int y) {
-    switch (i) {
-    }
+
 }
 
 int main(int argc, char** argv) {
-
-//    glutInit(&argc, argv);
-//    glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
-//    glutInitWindowPosition(0, 0);
-//    glutInitWindowSize(800, 600);
-//    glutCreateWindow(argv[0]);
-//
-    init(argc, argv);
+    init(argc, argv, "preview");
     glutReshapeFunc(resize);
     glutDisplayFunc(draw);
-    glutIgnoreKeyRepeat(1);
+    //glutIgnoreKeyRepeat(1);
     glutTimerFunc(20, update, 0);
     glutKeyboardFunc(keyPress);
     glutKeyboardUpFunc(keyPress);
     glutPassiveMotionFunc(mouseMove);
     glutMouseFunc(mouseClick);
     glutSpecialFunc(special_key);
-//
-//    glewInit();
-
 
     const Util::ShaderProgram& shader_program = Util::getShader(NGIN_SHADER_OBJECT_SHADER);
 

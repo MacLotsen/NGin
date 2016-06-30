@@ -19,23 +19,12 @@
 #ifndef NGIN_INIT_H
 #define NGIN_INIT_H
 
-#include <string>
-#include <tuple>
-
-namespace UI {
-    struct Window {
-        std::string title;
-        std::pair<int, int> resolution;
-        bool fullscreen;
-    };
-
-    extern Window window;
-}
-
 /**
  * Required setup functions for NGin::init()
  */
-void initOutput();
+void initWindow();
+void initCamera();
+void initKeyboard();
 void initShaders();
 
 #endif //NGIN_INIT_H

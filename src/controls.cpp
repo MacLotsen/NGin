@@ -16,10 +16,12 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <GL/glew.h>
+#include <GL/freeglut.h>
 #include <iostream>
 #include <glm/ext.hpp>
 #include "controls.h"
-#include "init.h"
+#include "registry.h"
 
 // freeglut forgot something -.-
 #define GLUT_WHEEL_UP   3
@@ -98,7 +100,7 @@ void mouseMove(int x, int y, Camera& camera) {
     // http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-17-quaternions/
 
     //if ((state & BUTTON_LEFT) == BUTTON_LEFT) {
-    std::pair<int, int> center (UI::window.resolution.first / 2, UI::window.resolution.second / 2);
+    std::pair<int, int> center (Registry::window.resolution.first / 2, Registry::window.resolution.second / 2);
 
     dx += (center.first - x) * camera.mouseSpeed;
     dy += (center.second - y) * camera.mouseSpeed;
@@ -146,7 +148,7 @@ void updateCamera(Camera& c) {
 
     dx = dy = 0.0f;
 
-    glutWarpPointer(UI::window.resolution.first / 2, UI::window.resolution.second / 2);
+    glutWarpPointer(Registry::window.resolution.first / 2, Registry::window.resolution.second / 2);
 }
 
 glm::mat4 getViewMatrix(const Camera& c) {

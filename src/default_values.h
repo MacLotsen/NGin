@@ -19,7 +19,7 @@
 #ifndef GAME_ENGINE_DEFAULTS_HPP
 #define GAME_ENGINE_DEFAULTS_HPP
 
-#include <ngin.h>
+#include <ngin/model.h>
 #include "controls.h"
 
 namespace defaults {

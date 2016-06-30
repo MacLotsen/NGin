@@ -16,15 +16,31 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <iostream>
 #include <ngin/ngin.h>
-#include <ngin/model.h>
-#include <glm/ext.hpp>
+#include <ngin/io.h>
+#include "init.h"
+#include "registry.h"
+#include <GL/freeglut.h>
 
-using namespace NGin;
+using namespace NGin::IO;
 
-void Model::setMaterial (const Model::Material &material, const GLuint shader) {
-    glUniform3fv(glGetUniformLocation(shader, "ambient"), 1, glm::value_ptr(material.ambient));
-    glUniform3fv(glGetUniformLocation(shader, "diffuse"), 1, glm::value_ptr(material.diffuse));
-    glUniform3fv(glGetUniformLocation(shader, "specular"), 1, glm::value_ptr(material.specular));
-    glUniform1f(glGetUniformLocation(shader, "power"), material.power);
+bool keyboard_state[256];
+std::map<int, bool> special_keyboard_state;
+std::map<KeyEvent*, output_f> Registry::key_registry;
+
+void keyEvent(unsigned char key, int, int) {
+    keyboard_state[key] = !keyboard_state[key];
+}
+
+void specialKeyEvent(int i, int, int) {
+    special_keyboard_state[i] = !special_keyboard_state[i];
+}
+
+void initKeyboard() {
+    glutIgnoreKeyRepeat(1);
+    glutKeyboardFunc(keyEvent);
+    glutKeyboardUpFunc(keyEvent);
+    glutSpecialFunc(specialKeyEvent);
+    glutSpecialUpFunc(specialKeyEvent);
 }
