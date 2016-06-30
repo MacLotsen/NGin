@@ -20,6 +20,11 @@ addons:
 
 install:
   - if [ "$CXX" = "g++" ]; then export CXX="g++-4.9" CC="gcc-4.9"; fi
+  - export glm_DIR="${TRAVIS_BUILD_DIR}/glm"
+  - mkdir "${glm_DIR}" && cd "${glm_DIR}"
+  - wget https://github.com/g-truc/glm/releases/download/0.9.7.4/glm-0.9.7.4.zip
+  - unzip glm-0.9.7.4.zip
+  - cd glm && cmake . && make
 
 script:
   - cmake . && make -j4 && ctest --output-on-failure
