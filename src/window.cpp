@@ -21,7 +21,7 @@
 #include <ngin/window.h>
 #include "init.h"
 #include "registry.h"
-#include <iostream>
+#include "ini_parser.h"
 
 
 using namespace std;
@@ -29,90 +29,26 @@ using namespace NGin;
 
 UI::Window Registry::window;
 
-string getSection(FILE* f, bool open = false) {
-    char c = fgetc(f);
-    if (c == '[') {
-        return getSection(f, true);
-    } else if (c == ']') {
-        return "";
-    } else if (open) {
-        return c + getSection(f, open);
-    }
-    return getSection(f);
-}
-
-string getKey(FILE* f) {
-    char c = fgetc(f);
-    if (c == '=') {
-        return "";
-    } else if (c == '\n') {
-        return getKey(f);
-    } else if (c == '[') {
-        return "[";
-    }
-    return c + getKey(f);
-}
-
-string getValue(FILE* f) {
-    char c = fgetc(f);
-    if (c == '\n') {
-        return "";
-    } else {
-        return c + getValue(f);
-    }
-}
-
-void parse_window(FILE* f) {
-    string key = getKey(f);
-    if (key == "[") {
-        return;
-    } else if (key == "title") {
-        Registry::window.title = getValue(f);
-    } else if (key == "resolution") {
-        bool passedX;
-        string w, h;
-        for (auto c : getValue(f)) {
-            if (c == 'x') {
-                passedX = true;
-                continue;
-            }
-            if (passedX)
-                h += c;
-            else
-                w += c;
-        }
-        Registry::window.resolution.first = stoi(w);
-        Registry::window.resolution.second = stoi(h);
-    } else if (key == "fullscreen") {
-        Registry::window.fullscreen = (getValue(f) != "0");
-    }
-    return parse_window(f);
-}
-
-void parse_keys(FILE* f) {
-
-}
-
 void parse_config() {
-    FILE* f = fopen("games/preview/config.ini", "r");
-    if (f) {
+    ini_map_t raw = parse_ini("games/preview/config.ini");
 
-        string section = getSection(f);
-        if (section == "WINDOW") {
-            parse_window(f);
-        } else if (section == "KEYS") {
-            parse_keys(f);
+    Registry::window.title = raw["WINDOW"]["title"];
+
+    bool passedX;
+    string w, h;
+    for (auto c : raw["WINDOW"]["resolution"]) {
+        if (c == 'x') {
+            passedX = true;
+            continue;
         }
-
-        section = getSection(f, true);
-        if (section == "WINDOW") {
-            parse_window(f);
-        } else if (section == "KEYS") {
-            parse_keys(f);
-        }
-
-        fclose(f);
+        if (passedX)
+            h += c;
+        else
+            w += c;
     }
+
+    Registry::window.resolution = pair<int, int>(stoi(w), stoi(h));
+    Registry::window.fullscreen = raw["WINDOW"]["fullscreen"] != "0";
 }
 
 void initWindow() {
