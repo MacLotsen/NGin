@@ -6,16 +6,16 @@ compiler:
 addons:
   apt:
     sources:
-      - debian-sid
+    - ubuntu-toolchain-r-test
     packages:
-      - cmake
-      - cmake-data
-      - gcc
-      - g++
-      - libglew-dev
-      - libglm-dev
-      - freeglut3-dev
-      - libgtest-dev
+    - cmake
+    - cmake-data
+    - gcc
+    - g++
+    - libglew-dev
+    - libglm-dev
+    - freeglut3-dev
+    - libgtest-dev
 
 install:
   - if [ "$CXX" = "g++" ]; then export CXX="g++-4.9" CC="gcc-4.9"; fi
