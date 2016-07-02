@@ -19,6 +19,8 @@
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 #include <ngin/window.h>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/ext.hpp>
 #include "init.h"
 #include "registry.h"
 #include "ini_parser.h"
@@ -28,8 +30,9 @@ using namespace std;
 using namespace NGin;
 
 UI::Window Registry::window;
+UI::Perspective Registry::perspective;
 
-void parse_window_config() {
+void parse_config() {
     ini_map_t raw = parse_ini("games/preview/config.ini");
 
     Registry::window.title = raw["WINDOW"]["title"];
@@ -49,10 +52,34 @@ void parse_window_config() {
 
     Registry::window.resolution = pair<int, int>(stoi(w), stoi(h));
     Registry::window.fullscreen = raw["WINDOW"]["fullscreen"] != "0";
+
+    Registry::perspective.angle = stof(raw["VIEW"]["angle"]);
+    Registry::perspective.far_plane = stof(raw["VIEW"]["far_plane"]);
+    Registry::perspective.near_plane = stof(raw["VIEW"]["near_plane"]);
+}
+
+const glm::mat4 create_projection() {
+    return glm::perspectiveFov(
+            Registry::perspective.angle,
+            (float) Registry::window.resolution.first,
+            (float) Registry::window.resolution.second,
+            Registry::perspective.near_plane,
+            Registry::perspective.far_plane
+    );
+}
+
+void window_resize(int w, int h) {
+    Registry::window.resolution = pair<int, int>(w, h);
+
+    const glm::mat4 proj = create_projection();
+    //TODO for each shader
+    glUniformMatrix4fv(glGetUniformLocation(Util::getShader(NGIN_SHADER_OBJECT_SHADER).program, "projection"), 1, GL_FALSE, glm::value_ptr(proj));
+
+    glViewport(0, 0, w, h);
 }
 
 void initWindow() {
-    parse_window_config();
+    parse_config();
     glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
     glutInitWindowPosition(0, 0);
     glutInitWindowSize(Registry::window.resolution.first, Registry::window.resolution.second);
@@ -60,4 +87,5 @@ void initWindow() {
     if (Registry::window.fullscreen) {
         glutFullScreen();
     }
+    glutReshapeFunc(window_resize);
 }

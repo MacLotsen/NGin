@@ -25,6 +25,13 @@
 namespace NGin {
 
     namespace UI {
+
+        struct Perspective {
+            float angle;
+            float near_plane;
+            float far_plane;
+        };
+
         struct Window {
             std::string title;
             std::pair<int, int> resolution;

@@ -39,6 +39,7 @@ namespace Registry {
     };
 
     extern NGin::UI::Window window;
+    extern NGin::UI::Perspective perspective;
 
     extern Register<NGin::Model::Mesh>       meshes;
     extern Register<NGin::Model::Object3D>   objects;

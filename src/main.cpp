@@ -117,9 +117,7 @@ void special_key(int i, int x, int y) {
 
 int main(int argc, char** argv) {
     init(argc, argv, "preview");
-    glutReshapeFunc(resize);
     glutDisplayFunc(draw);
-    //glutIgnoreKeyRepeat(1);
     glutTimerFunc(20, update, 0);
     glutKeyboardFunc(keyPress);
     glutKeyboardUpFunc(keyPress);

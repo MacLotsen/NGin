@@ -22,12 +22,14 @@
 TEST(IniParser, Sections) {
     ini_map_t result;
     ASSERT_NO_THROW(result = parse_ini("games/preview/config.ini"));
+    std::cout << result << std::endl;
     ASSERT_TRUE(result["WINDOW"]["title"] != "");
 }
 
 TEST(IniParser, Global) {
     ini_map_t result;
     ASSERT_NO_THROW(result = parse_ini("games/preview/meshes.ini"));
+    std::cout << result << std::endl;
     ASSERT_TRUE(result["GLOBAL"].size() > 0);
     ASSERT_TRUE(result["GLOBAL"]["cube"] != "");
 }

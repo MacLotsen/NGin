@@ -39,7 +39,7 @@ ini_map_t parse_ini(string path) {
     while((character = fgetc(file)) != EOF) {
         switch((char) character) {
             case '[':
-                if (state == PARSING_VALUE) {
+                if (state == PARSING_KEY) {
                     result[section] = key_values;
                     key_values = map<string, string>();
                     section = "";
@@ -90,4 +90,15 @@ ini_map_t parse_ini(string path) {
         result[section] = key_values;
     }
     return result;
+}
+
+ostream& operator<<(ostream& os, const ini_map_t& map) {
+    for (auto kv : map) {
+        os << "SECTION: " << kv.first << endl;
+        for (auto kv2 : kv.second) {
+            os << "KV: " << kv2.first << '=' << kv2.second << endl;
+        }
+        os << endl;
+    }
+    return os;
 }

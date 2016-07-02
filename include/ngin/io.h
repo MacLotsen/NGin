@@ -39,16 +39,7 @@ namespace NGin {
             SCROLL
         };
 
-        struct Perspective {
-            float angle;
-            float width;
-            float height;
-            float near_plane;
-            float far_plane;
-        };
-
         struct Camera {
-            Perspective perspective;
             Model::Object3D* head;
             float head_offset;
         };

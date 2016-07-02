@@ -19,11 +19,14 @@
 #ifndef NGIN_INI_PARSER_H
 #define NGIN_INI_PARSER_H
 
+#include <iostream>
 #include <string>
 #include <map>
 
 typedef std::map<std::string, std::map<std::string, std::string>> ini_map_t;
 
 ini_map_t parse_ini(std::string);
+
+std::ostream& operator << (std::ostream& os, const ini_map_t& map);
 
 #endif //NGIN_INI_PARSER_H
