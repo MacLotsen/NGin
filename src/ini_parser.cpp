@@ -69,7 +69,7 @@ ini_map_t parse_ini(string path) {
             default:
                 switch(state) {
                     case PARSING_GLOBAL:
-                        section = "global";
+                        section = "GLOBAL";
                         key += character;
                         break;
                     case PARSING_SECTION:

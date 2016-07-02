@@ -29,7 +29,7 @@ using namespace NGin;
 
 UI::Window Registry::window;
 
-void parse_config() {
+void parse_window_config() {
     ini_map_t raw = parse_ini("games/preview/config.ini");
 
     Registry::window.title = raw["WINDOW"]["title"];
@@ -52,7 +52,7 @@ void parse_config() {
 }
 
 void initWindow() {
-    parse_config();
+    parse_window_config();
     glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
     glutInitWindowPosition(0, 0);
     glutInitWindowSize(Registry::window.resolution.first, Registry::window.resolution.second);

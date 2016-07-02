@@ -19,10 +19,15 @@
 #include <gtest/gtest.h>
 #include "../src/ini_parser.h"
 
-#define PARSE parse_ini("games/preview/config.ini")
-
-TEST(Ini, Parser) {
-    ASSERT_NO_THROW(PARSE);
-    ini_map_t result = PARSE;
+TEST(IniParser, Sections) {
+    ini_map_t result;
+    ASSERT_NO_THROW(result = parse_ini("games/preview/config.ini"));
     ASSERT_TRUE(result["WINDOW"]["title"] != "");
+}
+
+TEST(IniParser, Global) {
+    ini_map_t result;
+    ASSERT_NO_THROW(result = parse_ini("games/preview/meshes.ini"));
+    ASSERT_TRUE(result["GLOBAL"].size() > 0);
+    ASSERT_TRUE(result["GLOBAL"]["cube"] != "");
 }

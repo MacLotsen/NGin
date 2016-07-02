@@ -18,5 +18,5 @@ It is not registered in any package manager... Have a happy time building!
 ### BUILDING
 ```bash
 cmake . && make
-bin/preview
+bin/ngin_preview
 ```
