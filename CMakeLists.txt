@@ -33,7 +33,8 @@ set(ENGINE_SRC
         src/object3d.cpp
         src/window.cpp
         src/camera.cpp
-        src/keyboard.cpp src/ini_parser.cpp)
+        src/keyboard.cpp
+        src/ini_parser.cpp)
 
 set(ENGINE_TESTS
         test/main.cpp

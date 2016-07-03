@@ -58,6 +58,8 @@ namespace NGin {
             glm::vec3 position;
             glm::vec3 scale;
             glm::quat orientation;
+
+            Object3D(const shader_flag_t f = NGIN_SHADER_OBJECT_SHADER) : shader_flag(f) {}
         };
 
         struct Skeleton {

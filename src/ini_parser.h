@@ -19,6 +19,8 @@
 #ifndef NGIN_INI_PARSER_H
 #define NGIN_INI_PARSER_H
 
+#include <glm/glm.hpp>
+#include <glm/gtx/quaternion.hpp>
 #include <iostream>
 #include <string>
 #include <map>
@@ -26,6 +28,9 @@
 typedef std::map<std::string, std::map<std::string, std::string>> ini_map_t;
 
 ini_map_t parse_ini(std::string);
+
+glm::vec3 parseVec(std::string);
+glm::quat parseQuat(std::string);
 
 std::ostream& operator << (std::ostream& os, const ini_map_t& map);
 

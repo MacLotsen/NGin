@@ -16,12 +16,14 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <ngin/ngin.h>
-#include <ngin/model.h>
-#include "registry.h"
 #include <fstream>
 #include <cstring>
 #include <vector>
+#include <ngin/ngin.h>
+#include <ngin/model.h>
+#include "registry.h"
+#include "init.h"
+#include "ini_parser.h"
 
 using namespace NGin;
 
@@ -183,8 +185,21 @@ Model::Mesh* Model::meshFromFile(const char* filename, GLuint shader, GLuint buf
     return m;
 }
 
+void parse_mesh_registry() {
+    ini_map_t result = parse_ini("games/preview/meshes.ini");
+    for (auto kv : result["GLOBAL"]) {
+        Registry::Register<Model::Mesh>::Record record;
+        record.path = kv.second;
+        Registry::meshes.records[kv.first] = record;
+    }
+}
+
 void Model::render(const Model::Mesh& mesh) {
     glBindVertexArray(mesh.vao);
     glDrawArrays(mesh.buffer_strategy, 0, mesh.ver_size);
     glBindVertexArray(0);
+}
+
+void initMeshes() {
+    parse_mesh_registry();
 }

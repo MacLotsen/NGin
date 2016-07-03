@@ -30,4 +30,7 @@ void NGin::init(int argc, char** argv, std::string game) {
     initCamera();
     initKeyboard();
 
+    initMeshes();
+    initObjects();
+
 }

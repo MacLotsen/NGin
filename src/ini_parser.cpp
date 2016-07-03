@@ -92,6 +92,48 @@ ini_map_t parse_ini(string path) {
     return result;
 }
 
+glm::vec3 parseVec(std::string raw) {
+    int i = 0;
+    glm::vec3 result;
+    std::string tmp;
+    for (auto c : raw) {
+        if (c == ' ') {
+            result[i++] = stof(tmp);
+            tmp = "";
+        } else {
+            tmp += c;
+        }
+    }
+    // append the last element
+    if (tmp != "") {
+        result[i] = stof(tmp);
+    }
+    // if theres only one arg
+    if (i == 0) {
+        result = glm::vec3(stof(tmp));
+    }
+    return result;
+}
+
+glm::quat parseQuat(std::string raw) {
+    int i = 0;
+    glm::quat result;
+    std::string tmp;
+    for (auto c : raw) {
+        if (c == ' ') {
+            result[i++] = stof(tmp);
+            tmp = "";
+        } else {
+            tmp += c;
+        }
+    }
+    // append the last element
+    if (tmp != "") {
+        result[i] = stof(tmp);
+    }
+    return result;
+}
+
 ostream& operator<<(ostream& os, const ini_map_t& map) {
     for (auto kv : map) {
         os << "SECTION: " << kv.first << endl;

@@ -16,7 +16,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
 #include <ngin/ngin.h>
 #include <ngin/io.h>
 #include "init.h"
