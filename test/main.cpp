@@ -18,9 +18,9 @@
 
 #include <gtest/gtest.h>
 
-TEST(Hello, World) {
-    ASSERT_TRUE(1);
-}
+//TEST(Hello, World) {
+//    ASSERT_TRUE(1);
+//}
 
 int main(int argc, char** argv) {
     testing::InitGoogleTest(&argc, argv);

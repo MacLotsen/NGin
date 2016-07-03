@@ -16,15 +16,37 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef NGIN_REGISTRY_H
+#define NGIN_REGISTRY_H
+
 #include <ngin/ngin.h>
+#include <ngin/window.h>
 #include <ngin/model.h>
-#include <glm/ext.hpp>
+#include <ngin/io.h>
+#include <map>
+#include <tuple>
 
-using namespace NGin;
+namespace Registry {
 
-void Model::setMaterial (const Model::Material &material, const GLuint shader) {
-    glUniform3fv(glGetUniformLocation(shader, "ambient"), 1, glm::value_ptr(material.ambient));
-    glUniform3fv(glGetUniformLocation(shader, "diffuse"), 1, glm::value_ptr(material.diffuse));
-    glUniform3fv(glGetUniformLocation(shader, "specular"), 1, glm::value_ptr(material.specular));
-    glUniform1f(glGetUniformLocation(shader, "power"), material.power);
+    template<typename T>
+    struct Register {
+
+        typedef struct {
+            std::string path;
+            T* value = nullptr;
+        } Record;
+        std::map<std::string, Record> records;
+    };
+
+    extern NGin::UI::Window window;
+    extern NGin::UI::Perspective perspective;
+
+    extern Register<NGin::Model::Mesh>       meshes;
+    extern Register<NGin::Model::Object3D>   objects;
+
+    extern std::map<NGin::IO::KeyEvent*, NGin::IO::output_f> key_registry;
+    extern std::map<NGin::IO::KeyEvent*, std::pair<NGin::IO::MouseEvent, NGin::IO::output_f>> mouse_registry;
+
 }
+
+#endif //NGIN_REGISTRY_H

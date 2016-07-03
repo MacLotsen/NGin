@@ -16,12 +16,13 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <ngin.h>
-#include <glm/ext.hpp>
-//TODO Window/Util namespace
+#include <GL/glew.h>
 #include <GL/freeglut.h>
+#include <ngin/ngin.h>
+#include <glm/ext.hpp>
 
 #include "default_values.h"
+#include "registry.h"
 
 using namespace std;
 using namespace NGin;
@@ -29,7 +30,7 @@ using namespace NGin;
 Camera camera = defaults::camera;
 
 Model::Mesh cone, cube, star, plane, pyramid;
-glm::vec3 lightPosition(0, 1, -4);
+glm::vec3 lightPosition(0, 1, -6);
 
 void construct_meshes();
 
@@ -45,8 +46,7 @@ void resize(int w, int h) {
     camera.viewWidth = w;
     camera.viewHeight = h;
     glm::mat4 projection = getProjectionMatrix(camera);
-    glUniformMatrix4fv(glGetUniformLocation(shader_program.program, "projection"), 1, GL_FALSE,
-                       glm::value_ptr(projection));
+    glUniformMatrix4fv(glGetUniformLocation(shader_program.program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
     glViewport(0, 0, w, h);
     glutPostRedisplay();
 }
@@ -67,8 +67,12 @@ void draw() {
         trans = translate(camera.pos);
         glUniformMatrix4fv(glGetUniformLocation(shader_program.program, "model"), 1, GL_FALSE, glm::value_ptr(trans));
         setMaterial(defaults::solidRed, shader_program.program);
-        Model::render(pyramid);
+        Model::render(star);
     }
+
+    trans = glm::translate(lightPosition);
+    glUniformMatrix4fv(glGetUniformLocation(shader_program.program, "model"), 1, GL_FALSE, glm::value_ptr(trans));
+    glutSolidTetrahedron();
 
     trans = glm::translate(glm::vec3(-4.0f,0,4.0f));
     glUniformMatrix4fv(glGetUniformLocation(shader_program.program, "model"), 1, GL_FALSE, glm::value_ptr(trans));
@@ -95,6 +99,11 @@ void draw() {
 
 void keyPress(unsigned char key, int, int) {
     keyPress(key);
+    for (auto record : Registry::key_registry) {
+        if (record.first->key == key) {
+            record.second();
+        }
+    }
 }
 
 void mouseMove(int x, int y) {
@@ -103,31 +112,18 @@ void mouseMove(int x, int y) {
 }
 
 void special_key(int i, int x, int y) {
-    switch (i) {
-    }
+
 }
 
 int main(int argc, char** argv) {
-
-//    glutInit(&argc, argv);
-//    glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
-//    glutInitWindowPosition(0, 0);
-//    glutInitWindowSize(800, 600);
-//    glutCreateWindow(argv[0]);
-//
-    init(argc, argv);
-    glutReshapeFunc(resize);
+    init(argc, argv, "preview");
     glutDisplayFunc(draw);
-    glutIgnoreKeyRepeat(1);
     glutTimerFunc(20, update, 0);
     glutKeyboardFunc(keyPress);
     glutKeyboardUpFunc(keyPress);
-    glutMotionFunc(mouseMove);
+    glutPassiveMotionFunc(mouseMove);
     glutMouseFunc(mouseClick);
     glutSpecialFunc(special_key);
-//
-//    glewInit();
-
 
     const Util::ShaderProgram& shader_program = Util::getShader(NGIN_SHADER_OBJECT_SHADER);
 
@@ -140,7 +136,6 @@ int main(int argc, char** argv) {
     glEnable(GL_DEPTH_TEST);
 
     glutMainLoop();
-
     return 0;
 }
 

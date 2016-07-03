@@ -16,15 +16,21 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <ngin/ngin.h>
-#include <ngin/model.h>
-#include <glm/ext.hpp>
+#include <GL/glew.h>
+#include <GL/freeglut.h>
+#include "init.h"
+#include "registry.h"
 
-using namespace NGin;
+void NGin::init(int argc, char** argv, std::string game) {
+    glutInit(&argc, argv);
+    initWindow();
+    glewInit();
 
-void Model::setMaterial (const Model::Material &material, const GLuint shader) {
-    glUniform3fv(glGetUniformLocation(shader, "ambient"), 1, glm::value_ptr(material.ambient));
-    glUniform3fv(glGetUniformLocation(shader, "diffuse"), 1, glm::value_ptr(material.diffuse));
-    glUniform3fv(glGetUniformLocation(shader, "specular"), 1, glm::value_ptr(material.specular));
-    glUniform1f(glGetUniformLocation(shader, "power"), material.power);
+    initShaders();
+    initCamera();
+    initKeyboard();
+
+    initMeshes();
+    initObjects();
+
 }

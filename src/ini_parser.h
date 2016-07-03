@@ -16,15 +16,22 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <ngin/ngin.h>
-#include <ngin/model.h>
-#include <glm/ext.hpp>
+#ifndef NGIN_INI_PARSER_H
+#define NGIN_INI_PARSER_H
 
-using namespace NGin;
+#include <glm/glm.hpp>
+#include <glm/gtx/quaternion.hpp>
+#include <iostream>
+#include <string>
+#include <map>
 
-void Model::setMaterial (const Model::Material &material, const GLuint shader) {
-    glUniform3fv(glGetUniformLocation(shader, "ambient"), 1, glm::value_ptr(material.ambient));
-    glUniform3fv(glGetUniformLocation(shader, "diffuse"), 1, glm::value_ptr(material.diffuse));
-    glUniform3fv(glGetUniformLocation(shader, "specular"), 1, glm::value_ptr(material.specular));
-    glUniform1f(glGetUniformLocation(shader, "power"), material.power);
-}
+typedef std::map<std::string, std::map<std::string, std::string>> ini_map_t;
+
+ini_map_t parse_ini(std::string);
+
+glm::vec3 parseVec(std::string);
+glm::quat parseQuat(std::string);
+
+std::ostream& operator << (std::ostream& os, const ini_map_t& map);
+
+#endif //NGIN_INI_PARSER_H

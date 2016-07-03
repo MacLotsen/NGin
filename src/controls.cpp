@@ -16,7 +16,12 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <GL/glew.h>
+#include <GL/freeglut.h>
+#include <iostream>
+#include <glm/ext.hpp>
 #include "controls.h"
+#include "registry.h"
 
 // freeglut forgot something -.-
 #define GLUT_WHEEL_UP   3
@@ -37,12 +42,12 @@
 int scroll_buffer;
 unsigned int state;
 
-const glm::vec3 UP(0,1,0), SCALE(.1f);
+float dx, dy;
 
-glm::vec2 prevMouseMovement;
+const glm::vec3 UP(0, 1, 0);
 
 void keyPress(unsigned char key) {
-    switch(key) {
+    switch (key) {
         case ESC:
         case 'q':
             exit(0);
@@ -88,73 +93,69 @@ void mouseClick(int btn, int btnState, int x, int y) {
         scroll_buffer -= btnState;
     }
 
-    prevMouseMovement = glm::vec2(x,y);
-
 }
 
-void mouseMove(int x, int y, Camera &camera) {
+void mouseMove(int x, int y, Camera& camera) {
 
     // http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-17-quaternions/
 
-    if ((state & BUTTON_LEFT) == BUTTON_LEFT) {
+    //if ((state & BUTTON_LEFT) == BUTTON_LEFT) {
+    std::pair<int, int> center (Registry::window.resolution.first / 2, Registry::window.resolution.second / 2);
 
-        glm::vec3 axis = cross(camera.dir, UP);
-        glm::quat pitch = glm::angleAxis(glm::radians(prevMouseMovement.y - y), axis);
-        glm::quat yaw = glm::angleAxis(glm::radians(prevMouseMovement.x - x), UP);
+    dx += (center.first - x) * camera.mouseSpeed;
+    dy += (center.second - y) * camera.mouseSpeed;
 
-        glm::quat dir = normalize(cross(pitch, yaw));
+//    } else if ((state & BUTTON_RIGHT) == BUTTON_RIGHT) {
+//
+//    }
 
-        camera.dir = glm::rotate(dir, camera.dir);
-
-    } else if ((state & BUTTON_RIGHT) == BUTTON_RIGHT) {
-
-    }
-
-    prevMouseMovement = glm::vec2(x,y);
 
 }
 
-void updateCamera(Camera &c) {
+void updateCamera(Camera& c) {
 
+    // update camera movement
     if ((state & FORWARD) == FORWARD) {
-        c.pos += c.dir * SCALE;
-    }
-
-    if ((state & BACKWARD) == BACKWARD) {
-        c.pos -= c.dir * SCALE;
+        c.pos += c.dir * c.movementSpeed;
+    } else if ((state & BACKWARD) == BACKWARD) {
+        c.pos -= c.dir * c.movementSpeed;
     }
 
     if ((state & LEFT) == LEFT) {
-        c.pos -= cross(c.dir, UP) * SCALE;
-    }
-
-    if ((state & RIGHT) == RIGHT) {
-        c.pos += cross(c.dir, UP) * SCALE;
+        c.pos -= cross(c.dir, UP) * c.movementSpeed;
+    } else if ((state & RIGHT) == RIGHT) {
+        c.pos += cross(c.dir, UP) * c.movementSpeed;
     }
 
     if ((state & UPWARD) == UPWARD) {
-        c.pos += UP * SCALE;
+        c.pos += UP * c.movementSpeed;
+    } else if ((state & DOWNWARD) == DOWNWARD) {
+        c.pos -= UP * c.movementSpeed;
     }
 
-    if ((state & DOWNWARD) == DOWNWARD) {
-        c.pos -= UP * SCALE;
-    }
+    // update camera distance
+    c.dist = glm::max(c.dist - ((float) scroll_buffer * c.scrollSpeed), glm::vec3());
+    scroll_buffer = 0;
 
-    if (scroll_buffer > 0) {
-        scroll_buffer--;
-        c.dist *= 1.01f;
-    } else if (scroll_buffer < 0) {
-        scroll_buffer++;
-        c.dist *= 0.99f;
-    }
+    // update camera rotation
+    glm::vec3 axis = cross(c.dir, UP);
+    glm::quat pitch = glm::angleAxis(glm::radians(dy), axis);
+    glm::quat yaw = glm::angleAxis(glm::radians(dx), UP);
 
+    glm::quat dir = normalize(cross(pitch, yaw));
+
+    c.dir = glm::rotate(dir, c.dir);
+
+    dx = dy = 0.0f;
+
+    glutWarpPointer(Registry::window.resolution.first / 2, Registry::window.resolution.second / 2);
 }
 
-glm::mat4 getViewMatrix(const Camera & c) {
+glm::mat4 getViewMatrix(const Camera& c) {
     return glm::lookAt(c.pos - c.dist * c.dir, c.pos + c.dir, UP);
 }
 
-glm::mat4 getProjectionMatrix(const Camera & c) {
+glm::mat4 getProjectionMatrix(const Camera& c) {
     return glm::perspectiveFov(c.viewAngle,
                                c.viewWidth,
                                c.viewHeight,

@@ -16,15 +16,20 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <ngin/ngin.h>
-#include <ngin/model.h>
-#include <glm/ext.hpp>
+#include <gtest/gtest.h>
+#include "../src/ini_parser.h"
 
-using namespace NGin;
+TEST(IniParser, Sections) {
+    ini_map_t result;
+    ASSERT_NO_THROW(result = parse_ini("games/preview/config.ini"));
+    std::cout << result << std::endl;
+    ASSERT_TRUE(result["WINDOW"]["title"] != "");
+}
 
-void Model::setMaterial (const Model::Material &material, const GLuint shader) {
-    glUniform3fv(glGetUniformLocation(shader, "ambient"), 1, glm::value_ptr(material.ambient));
-    glUniform3fv(glGetUniformLocation(shader, "diffuse"), 1, glm::value_ptr(material.diffuse));
-    glUniform3fv(glGetUniformLocation(shader, "specular"), 1, glm::value_ptr(material.specular));
-    glUniform1f(glGetUniformLocation(shader, "power"), material.power);
+TEST(IniParser, Global) {
+    ini_map_t result;
+    ASSERT_NO_THROW(result = parse_ini("games/preview/meshes.ini"));
+    std::cout << result << std::endl;
+    ASSERT_TRUE(result["GLOBAL"].size() > 0);
+    ASSERT_TRUE(result["GLOBAL"]["cube"] != "");
 }

@@ -22,7 +22,11 @@
 /**
  * Required setup functions for NGin::init()
  */
-void initIO();
+void initWindow();
+void initCamera();
+void initKeyboard();
 void initShaders();
+void initMeshes();
+void initObjects();
 
 #endif //NGIN_INIT_H

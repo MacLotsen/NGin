@@ -19,7 +19,6 @@
 #ifndef GAME_ENGINE_CONTROLS_H
 #define GAME_ENGINE_CONTROLS_H
 
-#include <GL/freeglut.h>
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -29,6 +28,9 @@ struct Camera {
     float viewHeight;
     float viewNearPlane;
     float viewFarPlane;
+    float scrollSpeed;
+    float mouseSpeed;
+    float movementSpeed;
 
     glm::vec3 pos;
     glm::vec3 dir;

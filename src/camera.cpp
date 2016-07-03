@@ -16,15 +16,57 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <ngin/ngin.h>
-#include <ngin/model.h>
-#include <glm/ext.hpp>
+#include <GL/glew.h>
+#include <GL/freeglut.h>
+#include <ngin/io.h>
+#include <iostream>
+#include "registry.h"
 
-using namespace NGin;
+using namespace NGin::IO;
 
-void Model::setMaterial (const Model::Material &material, const GLuint shader) {
-    glUniform3fv(glGetUniformLocation(shader, "ambient"), 1, glm::value_ptr(material.ambient));
-    glUniform3fv(glGetUniformLocation(shader, "diffuse"), 1, glm::value_ptr(material.diffuse));
-    glUniform3fv(glGetUniformLocation(shader, "specular"), 1, glm::value_ptr(material.specular));
-    glUniform1f(glGetUniformLocation(shader, "power"), material.power);
+std::map<KeyEvent*, std::pair<MouseEvent, output_f>> Registry::mouse_registry;
+
+void pitch() {
+
+}
+
+void yaw() {
+
+}
+
+void roll() {
+
+}
+
+//TODO move to keyboard
+
+void forward() {
+    std::cout << "FORWAAAARD!!" << std::endl;
+}
+
+void backward() {
+
+}
+
+void left() {
+
+}
+
+void right() {
+
+}
+
+void up() {
+
+}
+
+void down() {
+
+}
+
+void initCamera() {
+    glutSetCursor(GLUT_CURSOR_NONE);
+    KeyEvent* k = new KeyEvent;
+    k->key = 'w';
+    Registry::key_registry[k] = forward;
 }

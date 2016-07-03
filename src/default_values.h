@@ -19,7 +19,7 @@
 #ifndef GAME_ENGINE_DEFAULTS_HPP
 #define GAME_ENGINE_DEFAULTS_HPP
 
-#include <ngin.h>
+#include <ngin/model.h>
 #include "controls.h"
 
 namespace defaults {
@@ -32,6 +32,9 @@ namespace defaults {
             600.0f, // viewing height
             0.1f,   // near plane
             100.0f, // far plane
+            0.3f,   // scroll speed
+            0.3f,   // mouse speed
+            0.5f,   // movement speed
             glm::vec3(0, 0, 0), // position
             glm::vec3(0, 0, 1), // direction
             glm::vec3(4),// distance of target
@@ -46,7 +49,7 @@ namespace defaults {
 
     NGin::Model::Material softBlue {
             glm::vec3(.2f,.2f,1),
-            glm::vec3(.0f,.2f,.0f),
+            glm::vec3(1, 1, 1),
             glm::vec3(.7f),
             10.0f
     };
@@ -61,7 +64,7 @@ namespace defaults {
     NGin::Model::Material softOrange {
             glm::vec3(.8f,.5f,.2f),
             glm::vec3(.2f,.2f,.2f),
-            glm::vec3(.7f),
+            glm::vec3(.0f, 1, .0f),
             10.0f
     };
 

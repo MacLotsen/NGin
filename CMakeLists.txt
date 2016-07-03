@@ -25,30 +25,34 @@ add_definitions(${GLEW_DEFINITIONS})
 include_directories(${GTEST_INCLUDE_DIRS})
 
 set(ENGINE_SRC
+        src/engine.cpp
         src/shader.cpp
         src/controls.cpp
         src/mesh.cpp
         src/material.cpp
         src/object3d.cpp
-        src/window.cpp)
+        src/window.cpp
+        src/camera.cpp
+        src/keyboard.cpp
+        src/ini_parser.cpp)
+
+set(ENGINE_TESTS
+        test/main.cpp
+        test/ini_test.cpp)
 
 include_directories(include)
 
 add_library(ngin ${ENGINE_SRC})
 add_executable(ngin_preview src/main.cpp)
 
-
 target_link_libraries(ngin ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} ${GLEW_LIBRARIES})
 target_link_libraries(ngin_preview ngin)
 
 if (GTEST_FOUND)
     enable_testing()
-    add_executable(tests
-            test/main.cpp)
+    add_executable(tests ${ENGINE_TESTS})
     target_link_libraries(tests ${GTEST_LIBRARIES} ngin)
-    add_test(NAME tests
-            COMMAND bin/tests
-            )
+    add_test(NAME tests COMMAND bin/tests)
 endif (GTEST_FOUND)
 
 install(DIRECTORY include DESTINATION .)
