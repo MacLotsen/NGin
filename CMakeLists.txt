@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 project(NGin)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
 
 # export with UNIX dir structure
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
@@ -12,7 +12,7 @@ find_package(OpenGL REQUIRED)
 find_package(glm REQUIRED)
 find_package(GLUT REQUIRED)
 find_package(GLEW REQUIRED)
-find_package(GTest REQUIRED)
+find_package(GTest)
 
 include_directories(${GLUT_INCLUDE_DIRS})
 link_directories(${GLUT_LIBRARY_DIRS})
@@ -36,17 +36,20 @@ include_directories(include)
 
 add_library(ngin ${ENGINE_SRC})
 add_executable(ngin_preview src/main.cpp)
-add_executable(tests
-        test/main.cpp)
 
-target_link_libraries(ngin  ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} ${GLEW_LIBRARIES})
-target_link_libraries(ngin_preview  ngin)
-target_link_libraries(tests ${GTEST_LIBRARIES} ngin)
 
-enable_testing()
-add_test(NAME tests
-        COMMAND bin/tests
-        )
+target_link_libraries(ngin ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} ${GLEW_LIBRARIES})
+target_link_libraries(ngin_preview ngin)
+
+if (GTEST_FOUND)
+    enable_testing()
+    add_executable(tests
+            test/main.cpp)
+    target_link_libraries(tests ${GTEST_LIBRARIES} ngin)
+    add_test(NAME tests
+            COMMAND bin/tests
+            )
+endif (GTEST_FOUND)
 
 install(DIRECTORY include DESTINATION .)
 install(DIRECTORY share DESTINATION .)
