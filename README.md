@@ -1,4 +1,5 @@
-# NGin
+[travis-badge]: https://travis-ci.org/MacLotsen/NGin.svg?branch=master
+# NGin ![badge][travis-badge]
 A C/C++ OpenGL Game Engine
 
 ### DEPENDENCIES
