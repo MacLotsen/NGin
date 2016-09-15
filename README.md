@@ -7,7 +7,7 @@ A C/C++ OpenGL Game Engine
  - [GLM](http://glm.g-truc.net/0.9.7/index.html)
  - [GLew](http://glew.sourceforge.net/)
  - [FreeGLut](http://freeglut.sourceforge.net/)
- - [FreeImage](http://freeimage.sourceforge.net/)
+ - ~~[FreeImage](http://freeimage.sourceforge.net/)~~
  
 #### DEPENDENCIES BUIDLING
  - [CMake](https://cmake.org/)
