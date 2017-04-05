@@ -33,59 +33,59 @@ UI::Window Registry::window;
 UI::Perspective Registry::perspective;
 
 void parse_config() {
-    ini_map_t raw = parse_ini("games/preview/config.ini");
+	ini_map_t raw = parse_ini("games/preview/config.ini");
 
-    Registry::window.title = raw["WINDOW"]["title"];
+	Registry::window.title = raw["WINDOW"]["title"];
 
-    bool passedX;
-    string w, h;
-    for (auto c : raw["WINDOW"]["resolution"]) {
-        if (c == 'x') {
-            passedX = true;
-            continue;
-        }
-        if (passedX)
-            h += c;
-        else
-            w += c;
-    }
+	bool passedX;
+	string w, h;
+	for (auto c : raw["WINDOW"]["resolution"]) {
+		if (c == 'x') {
+			passedX = true;
+			continue;
+		}
+		if (passedX)
+			h += c;
+		else
+			w += c;
+	}
 
-    Registry::window.resolution = pair<int, int>(stoi(w), stoi(h));
-    Registry::window.fullscreen = raw["WINDOW"]["fullscreen"] != "0";
+	Registry::window.resolution = pair<int, int>(stoi(w), stoi(h));
+	Registry::window.fullscreen = raw["WINDOW"]["fullscreen"] != "0";
 
-    Registry::perspective.angle = stof(raw["VIEW"]["angle"]);
-    Registry::perspective.far_plane = stof(raw["VIEW"]["far_plane"]);
-    Registry::perspective.near_plane = stof(raw["VIEW"]["near_plane"]);
+	Registry::perspective.angle = stof(raw["VIEW"]["angle"]);
+	Registry::perspective.far_plane = stof(raw["VIEW"]["far_plane"]);
+	Registry::perspective.near_plane = stof(raw["VIEW"]["near_plane"]);
 }
 
 const glm::mat4 create_projection() {
-    return glm::perspectiveFov(
-            Registry::perspective.angle,
-            (float) Registry::window.resolution.first,
-            (float) Registry::window.resolution.second,
-            Registry::perspective.near_plane,
-            Registry::perspective.far_plane
-    );
+	return glm::perspectiveFov(
+			Registry::perspective.angle,
+			(float) Registry::window.resolution.first,
+			(float) Registry::window.resolution.second,
+			Registry::perspective.near_plane,
+			Registry::perspective.far_plane
+			);
 }
 
 void window_resize(int w, int h) {
-    Registry::window.resolution = pair<int, int>(w, h);
+	Registry::window.resolution = pair<int, int>(w, h);
 
-    const glm::mat4 proj = create_projection();
-    //TODO for each shader
-    glUniformMatrix4fv(glGetUniformLocation(Util::getShader(NGIN_SHADER_OBJECT_SHADER).program, "projection"), 1, GL_FALSE, glm::value_ptr(proj));
+	const glm::mat4 proj = create_projection();
+	//TODO for each shader
+	glUniformMatrix4fv(glGetUniformLocation(Util::getShader(NGIN_SHADER_OBJECT_SHADER).program, "projection"), 1, GL_FALSE, glm::value_ptr(proj));
 
-    glViewport(0, 0, w, h);
+	glViewport(0, 0, w, h);
 }
 
 void initWindow() {
-    parse_config();
-    glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
-    glutInitWindowPosition(0, 0);
-    glutInitWindowSize(Registry::window.resolution.first, Registry::window.resolution.second);
-    glutCreateWindow(Registry::window.title.c_str());
-    if (Registry::window.fullscreen) {
-        glutFullScreen();
-    }
-    glutReshapeFunc(window_resize);
+	parse_config();
+	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
+	glutInitWindowPosition(0, 0);
+	glutInitWindowSize(Registry::window.resolution.first, Registry::window.resolution.second);
+	glutCreateWindow(Registry::window.title.c_str());
+	if (Registry::window.fullscreen) {
+		glutFullScreen();
+	}
+	glutReshapeFunc(window_resize);
 }

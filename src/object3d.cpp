@@ -28,24 +28,29 @@ using namespace std;
 Registry::Register<Model::Object3D> Registry::objects;
 
 void initObjects() {
-    //TODO specify which objects to load
-    ini_map_t result = parse_ini("games/preview/objects.ini");
-    for (auto kv : result) {
-        map<string, string> properties = kv.second;
-        Model::Object3D* obj = new Model::Object3D();
-        //TODO load if unloaded
-        obj->mesh = Registry::meshes.records[properties["mesh"]].value;
-        obj->material = {
-                parseVec(properties["ambient"]),
-                parseVec(properties["diffuse"]),
-                parseVec(properties["specular"]),
-                stof(properties["power"])
-        };
-        obj->position = parseVec(properties["position"]);
-        obj->scale = parseVec(properties["scale"]);
-        obj->orientation = parseQuat(properties["orientation"]);
-        Registry::Register<Model::Object3D>::Record r;
-        r.value = obj;
-        Registry::objects.records[kv.first] = r;
-    }
+	//TODO specify which objects to load
+	ini_map_t result = parse_ini("games/preview/objects.ini");
+	for (auto kv : result) {
+		map<string, string> properties = kv.second;
+		Model::Object3D* obj = new Model::Object3D();
+		//TODO load if unloaded
+		auto record = Registry::meshes.records[properties["mesh"]];
+		if (!record.value) {
+			record.value = Model::meshFromFile(("games/preview/" + record.path).c_str(), Util::getShader(NGIN_SHADER_OBJECT_SHADER).program, GL_TRIANGLES);
+		}
+
+		obj->mesh = record.value;
+		obj->material = {
+			parseVec(properties["ambient"]),
+			parseVec(properties["diffuse"]),
+			parseVec(properties["specular"]),
+			stof(properties["power"])
+		};
+		obj->position = parseVec(properties["position"]);
+		obj->scale = parseVec(properties["scale"]);
+		obj->orientation = parseQuat(properties["orientation"]);
+		Registry::Register<Model::Object3D>::Record r;
+		r.value = obj;
+		Registry::objects.records[kv.first] = r;
+	}
 }

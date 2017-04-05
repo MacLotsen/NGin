@@ -18,15 +18,15 @@ varying vec3 V;
 
 void main() {
 
-    tex_cor = texture_coordinate;
+	tex_cor = texture_coordinate;
 
-    mat4 space = view * model;
+	mat4 space = view * model;
 
-    vec4 vert_pos = space * vec4(position, 1);
+	vec4 vert_pos = space * vec4(position, 1);
 
-    N = normalize(mat3(space) * normal);
-    L = normalize(mat3(view) * light);
-    V = normalize(-vert_pos.xyz);
+	N = normalize(mat3(space) * normal);
+	L = normalize(mat3(view) * light);
+	V = normalize(-vert_pos.xyz);
 
-    gl_Position = projection * vert_pos;
+	gl_Position = projection * vert_pos;
 }

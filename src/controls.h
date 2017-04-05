@@ -23,18 +23,18 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 struct Camera {
-    float viewAngle;
-    float viewWidth;
-    float viewHeight;
-    float viewNearPlane;
-    float viewFarPlane;
-    float scrollSpeed;
-    float mouseSpeed;
-    float movementSpeed;
+	float viewAngle;
+	float viewWidth;
+	float viewHeight;
+	float viewNearPlane;
+	float viewFarPlane;
+	float scrollSpeed;
+	float mouseSpeed;
+	float movementSpeed;
 
-    glm::vec3 pos;
-    glm::vec3 dir;
-    glm::vec3 dist;
+	glm::vec3 pos;
+	glm::vec3 dir;
+	glm::vec3 dist;
 };
 
 void updateCamera(Camera &);

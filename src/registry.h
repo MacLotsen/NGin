@@ -28,24 +28,24 @@
 
 namespace Registry {
 
-    template<typename T>
-    struct Register {
+	template<typename T>
+		struct Register {
 
-        typedef struct {
-            std::string path;
-            T* value = nullptr;
-        } Record;
-        std::map<std::string, Record> records;
-    };
+			typedef struct {
+				std::string path;
+				T* value = nullptr;
+			} Record;
+			std::map<std::string, Record> records;
+		};
 
-    extern NGin::UI::Window window;
-    extern NGin::UI::Perspective perspective;
+	extern NGin::UI::Window window;
+	extern NGin::UI::Perspective perspective;
 
-    extern Register<NGin::Model::Mesh>       meshes;
-    extern Register<NGin::Model::Object3D>   objects;
+	extern Register<NGin::Model::Mesh>       meshes;
+	extern Register<NGin::Model::Object3D>   objects;
 
-    extern std::map<NGin::IO::KeyEvent*, NGin::IO::output_f> key_registry;
-    extern std::map<NGin::IO::KeyEvent*, std::pair<NGin::IO::MouseEvent, NGin::IO::output_f>> mouse_registry;
+	extern std::map<NGin::IO::KeyEvent*, NGin::IO::output_f> key_registry;
+	extern std::map<NGin::IO::KeyEvent*, std::pair<NGin::IO::MouseEvent, NGin::IO::output_f>> mouse_registry;
 
 }
 

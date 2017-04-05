@@ -16,12 +16,12 @@ varying vec3 V;
 
 void main() {
 
-    vec3 R = reflect(-L, N);
+	vec3 R = reflect(-L, N);
 
-    vec3 diffusion = max(dot(V, R), 0.0f) * diffuse;//*/ * texture2D(sampler, tex_cor).rgb;
+	vec3 diffusion = max(dot(V, R), 0.0f) * diffuse;//*/ * texture2D(sampler, tex_cor).rgb;
 
-    vec3 specularation = pow(max(dot(V, R), 0.0f), power) * specular;
+	vec3 specularation = pow(max(dot(V, R), 0.0f), power) * specular;
 
-    gl_FragColor = vec4(ambient + diffusion + specularation, 1.0f);
+	gl_FragColor = vec4(ambient + diffusion + specularation, 1.0f);
 
 }

@@ -47,118 +47,118 @@ float dx, dy;
 const glm::vec3 UP(0, 1, 0);
 
 void keyPress(unsigned char key) {
-    switch (key) {
-        case ESC:
-        case 'q':
-            exit(0);
-        case 'f':
-            glutFullScreen();
-            break;
-        case 'w':
-            state ^= FORWARD;
-            break;
-        case 's':
-            state ^= BACKWARD;
-            break;
-        case 'a':
-            state ^= LEFT;
-            break;
-        case 'd':
-            state ^= RIGHT;
-            break;
-        case 'x':
-            state ^= UPWARD;
-            break;
-        case 'z':
-            state ^= DOWNWARD;
-            break;
-    }
+	switch (key) {
+		case ESC:
+		case 'q':
+			exit(0);
+		case 'f':
+			glutFullScreen();
+			break;
+		case 'w':
+			state ^= FORWARD;
+			break;
+		case 's':
+			state ^= BACKWARD;
+			break;
+		case 'a':
+			state ^= LEFT;
+			break;
+		case 'd':
+			state ^= RIGHT;
+			break;
+		case 'x':
+			state ^= UPWARD;
+			break;
+		case 'z':
+			state ^= DOWNWARD;
+			break;
+	}
 }
 
 void mouseClick(int btn, int btnState, int x, int y) {
 
-    if (btn == GLUT_LEFT_BUTTON) {
-        state ^= BUTTON_LEFT;
-    }
+	if (btn == GLUT_LEFT_BUTTON) {
+		state ^= BUTTON_LEFT;
+	}
 
-    if (btn == GLUT_RIGHT_BUTTON) {
-        state ^= BUTTON_RIGHT;
-    }
+	if (btn == GLUT_RIGHT_BUTTON) {
+		state ^= BUTTON_RIGHT;
+	}
 
-    if (btn == GLUT_WHEEL_UP) {
-        scroll_buffer += btnState;
-    }
+	if (btn == GLUT_WHEEL_UP) {
+		scroll_buffer += btnState;
+	}
 
-    if (btn == GLUT_WHEEL_DOWN) {
-        scroll_buffer -= btnState;
-    }
+	if (btn == GLUT_WHEEL_DOWN) {
+		scroll_buffer -= btnState;
+	}
 
 }
 
 void mouseMove(int x, int y, Camera& camera) {
 
-    // http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-17-quaternions/
+	// http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-17-quaternions/
 
-    //if ((state & BUTTON_LEFT) == BUTTON_LEFT) {
-    std::pair<int, int> center (Registry::window.resolution.first / 2, Registry::window.resolution.second / 2);
+	//if ((state & BUTTON_LEFT) == BUTTON_LEFT) {
+	std::pair<int, int> center (Registry::window.resolution.first / 2, Registry::window.resolution.second / 2);
 
-    dx += (center.first - x) * camera.mouseSpeed;
-    dy += (center.second - y) * camera.mouseSpeed;
+	dx += (center.first - x) * camera.mouseSpeed;
+	dy += (center.second - y) * camera.mouseSpeed;
 
-//    } else if ((state & BUTTON_RIGHT) == BUTTON_RIGHT) {
-//
-//    }
+	//    } else if ((state & BUTTON_RIGHT) == BUTTON_RIGHT) {
+	//
+	//    }
 
 
 }
 
 void updateCamera(Camera& c) {
 
-    // update camera movement
-    if ((state & FORWARD) == FORWARD) {
-        c.pos += c.dir * c.movementSpeed;
-    } else if ((state & BACKWARD) == BACKWARD) {
-        c.pos -= c.dir * c.movementSpeed;
-    }
+	// update camera movement
+	if ((state & FORWARD) == FORWARD) {
+		c.pos += c.dir * c.movementSpeed;
+	} else if ((state & BACKWARD) == BACKWARD) {
+		c.pos -= c.dir * c.movementSpeed;
+	}
 
-    if ((state & LEFT) == LEFT) {
-        c.pos -= cross(c.dir, UP) * c.movementSpeed;
-    } else if ((state & RIGHT) == RIGHT) {
-        c.pos += cross(c.dir, UP) * c.movementSpeed;
-    }
+	if ((state & LEFT) == LEFT) {
+		c.pos -= cross(c.dir, UP) * c.movementSpeed;
+	} else if ((state & RIGHT) == RIGHT) {
+		c.pos += cross(c.dir, UP) * c.movementSpeed;
+	}
 
-    if ((state & UPWARD) == UPWARD) {
-        c.pos += UP * c.movementSpeed;
-    } else if ((state & DOWNWARD) == DOWNWARD) {
-        c.pos -= UP * c.movementSpeed;
-    }
+	if ((state & UPWARD) == UPWARD) {
+		c.pos += UP * c.movementSpeed;
+	} else if ((state & DOWNWARD) == DOWNWARD) {
+		c.pos -= UP * c.movementSpeed;
+	}
 
-    // update camera distance
-    c.dist = glm::max(c.dist - ((float) scroll_buffer * c.scrollSpeed), glm::vec3());
-    scroll_buffer = 0;
+	// update camera distance
+	c.dist = glm::max(c.dist - ((float) scroll_buffer * c.scrollSpeed), glm::vec3());
+	scroll_buffer = 0;
 
-    // update camera rotation
-    glm::vec3 axis = cross(c.dir, UP);
-    glm::quat pitch = glm::angleAxis(glm::radians(dy), axis);
-    glm::quat yaw = glm::angleAxis(glm::radians(dx), UP);
+	// update camera rotation
+	glm::vec3 axis = cross(c.dir, UP);
+	glm::quat pitch = glm::angleAxis(glm::radians(dy), axis);
+	glm::quat yaw = glm::angleAxis(glm::radians(dx), UP);
 
-    glm::quat dir = normalize(cross(pitch, yaw));
+	glm::quat dir = normalize(cross(pitch, yaw));
 
-    c.dir = glm::rotate(dir, c.dir);
+	c.dir = glm::rotate(dir, c.dir);
 
-    dx = dy = 0.0f;
+	dx = dy = 0.0f;
 
-    glutWarpPointer(Registry::window.resolution.first / 2, Registry::window.resolution.second / 2);
+	glutWarpPointer(Registry::window.resolution.first / 2, Registry::window.resolution.second / 2);
 }
 
 glm::mat4 getViewMatrix(const Camera& c) {
-    return glm::lookAt(c.pos - c.dist * c.dir, c.pos + c.dir, UP);
+	return glm::lookAt(c.pos - c.dist * c.dir, c.pos + c.dir, UP);
 }
 
 glm::mat4 getProjectionMatrix(const Camera& c) {
-    return glm::perspectiveFov(c.viewAngle,
-                               c.viewWidth,
-                               c.viewHeight,
-                               c.viewNearPlane,
-                               c.viewFarPlane);
+	return glm::perspectiveFov(c.viewAngle,
+			c.viewWidth,
+			c.viewHeight,
+			c.viewNearPlane,
+			c.viewFarPlane);
 }

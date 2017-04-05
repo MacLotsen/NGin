@@ -26,47 +26,11 @@ using namespace NGin::IO;
 
 std::map<KeyEvent*, std::pair<MouseEvent, output_f>> Registry::mouse_registry;
 
-void pitch() {
-
-}
-
-void yaw() {
-
-}
-
-void roll() {
-
-}
-
-//TODO move to keyboard
-
-void forward() {
-    std::cout << "FORWAAAARD!!" << std::endl;
-}
-
-void backward() {
-
-}
-
-void left() {
-
-}
-
-void right() {
-
-}
-
-void up() {
-
-}
-
-void down() {
-
-}
-
 void initCamera() {
-    glutSetCursor(GLUT_CURSOR_NONE);
-    KeyEvent* k = new KeyEvent;
-    k->key = 'w';
-    Registry::key_registry[k] = forward;
+#if 0
+	glutSetCursor(GLUT_CURSOR_NONE);
+	KeyEvent* k = new KeyEvent;
+	k->key = 'w';
+	Registry::key_registry[k] = forward;
+#endif 0
 }

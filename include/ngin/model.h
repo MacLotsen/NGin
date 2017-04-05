@@ -24,48 +24,53 @@
 
 namespace NGin {
 
-    namespace Model {
+	namespace Model {
 
-        struct Mesh {
-            shader_flag_t shader_flags;
-            GLuint buffer_strategy;
-            GLuint vao;
-            GLuint pos_vbo;
-            GLuint nor_vbo;
-            GLuint uv_vbo;
-            GLsizei ver_size;
-        };
+		struct Mesh {
+			shader_flag_t shader_flags;
+			GLuint buffer_strategy;
+			GLuint vao;
+			GLuint pos_vbo;
+			GLuint nor_vbo;
+			GLuint uv_vbo;
+			GLsizei ver_size;
+		};
 
-        Mesh* meshFromFile(const char* filename, GLuint shader_program, GLuint type = GL_TRIANGLES);
+		Mesh *meshFromFile(const char *filename, GLuint shader_program, GLuint type = GL_TRIANGLES);
 
-        void render(const Mesh&);
+		void render(const Mesh &);
 
-        struct Material {
-            glm::vec3 ambient;
-            glm::vec3 diffuse;
-            glm::vec3 specular;
-            float power;
-        };
+		struct Material {
+			glm::vec3 ambient;
+			glm::vec3 diffuse;
+			glm::vec3 specular;
+			float power;
+		};
 
-        void setMaterial(const Material&, const GLuint);
+		void setMaterial(const Material &, const GLuint);
 
-        struct Object3D {
-            const shader_flag_t shader_flag;
-            Mesh* mesh = nullptr;
-            Material material;
-            //TODO add texture
+		struct Object3D {
+			const shader_flag_t shader_flag;
+			Mesh *mesh = nullptr;
+			Material material;
+			//TODO add texture
 
-            glm::vec3 position;
-            glm::vec3 scale;
-            glm::quat orientation;
+			glm::vec3 position;
+			glm::vec3 scale;
+			glm::quat orientation;
 
-            Object3D(const shader_flag_t f = NGIN_SHADER_OBJECT_SHADER) : shader_flag(f) {}
-        };
+			Object3D(const shader_flag_t f = NGIN_SHADER_OBJECT_SHADER) : shader_flag(f) {}
+		};
 
-        struct Skeleton {
+		struct SkeletonEdge {
+			Object3D *parent, *child;
+		};
 
-        };
-    }
+		struct Skeleton {
+			//            std::vector<SkeletonEdge> edges;
+			//            std
+		};
+	}
 
 }
 

@@ -25,25 +25,25 @@
 
 namespace NGin {
 
-    /**
-     * Change type when using more than 8 shaders
-     */
-    typedef unsigned char shader_flag_t;
+	/**
+	 * Change type when using more than 8 shaders
+	 */
+	typedef unsigned char shader_flag_t;
 
-    namespace Util {
+	namespace Util {
 
-        struct ShaderProgram {
-            const shader_flag_t flag;
-            GLuint program;
-            GLuint vertex;
-            GLuint fragment;
+		struct ShaderProgram {
+			const shader_flag_t flag;
+			GLuint program;
+			GLuint vertex;
+			GLuint fragment;
 
-            ShaderProgram(shader_flag_t _flag) : flag(_flag) {}
-        };
+			ShaderProgram(shader_flag_t _flag) : flag(_flag) {}
+		};
 
-        const ShaderProgram& getShader(const shader_flag_t index);
+		const ShaderProgram& getShader(const shader_flag_t index);
 
-    }
+	}
 
 }
 

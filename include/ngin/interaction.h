@@ -16,29 +16,24 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef NGIN_WINDOW_H
-#define NGIN_WINDOW_H
-
-#include <string>
-#include <tuple>
+#include "./model.h"
 
 namespace NGin {
 
-	namespace UI {
+	namespace ObjectAction {
 
-		struct Perspective {
-			float angle;
-			float near_plane;
-			float far_plane;
-		};
+		void (*action_func) (Model::Object3D&, float);
 
-		struct Window {
-			std::string title;
-			std::pair<int, int> resolution;
-			bool fullscreen;
-		};
+		/* BASIC OBJECT FUNCTIONS */
+		void pitch		(Model::Object3D&, float);
+		void yaw			(Model::Object3D&, float);
+		void roll			(Model::Object3D&, float);
+		void forward	(Model::Object3D&, float);
+		void backward	(Model::Object3D&, float);
+		void left			(Model::Object3D&, float);
+		void right		(Model::Object3D&, float);
+		void up				(Model::Object3D&, float);
+		void down			(Model::Object3D&, float);
 	}
 
 }
-
-#endif //NGIN_WINDOW_H

@@ -23,7 +23,7 @@
 
 namespace NGin {
 
-    void init(int argc, char **argv, std::string game);
+	void init(int argc, char **argv, std::string game);
 
 }
 

@@ -29,86 +29,62 @@ using namespace NGin;
 
 Camera camera = defaults::camera;
 
-Model::Mesh cone, cube, star, plane, pyramid;
 glm::vec3 lightPosition(0, 1, -6);
 
-void construct_meshes();
-
 void update(int delta) {
-    updateCamera(camera);
+	// TODO: reimplement controls
+	updateCamera(camera);
 
-    glutPostRedisplay();
-    glutTimerFunc(20, update, delta + 1);
+	glutPostRedisplay();
+	glutTimerFunc(20, update, delta + 1);
 };
 
 void resize(int w, int h) {
-    const Util::ShaderProgram shader_program = Util::getShader(NGIN_SHADER_OBJECT_SHADER);
-    camera.viewWidth = w;
-    camera.viewHeight = h;
-    glm::mat4 projection = getProjectionMatrix(camera);
-    glUniformMatrix4fv(glGetUniformLocation(shader_program.program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-    glViewport(0, 0, w, h);
-    glutPostRedisplay();
+	const Util::ShaderProgram shader_program = Util::getShader(NGIN_SHADER_OBJECT_SHADER);
+	camera.viewWidth = w;
+	camera.viewHeight = h;
+	glm::mat4 projection = getProjectionMatrix(camera);
+	glUniformMatrix4fv(glGetUniformLocation(shader_program.program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+	glViewport(0, 0, w, h);
+	glutPostRedisplay();
 }
 
 void draw() {
-    const Util::ShaderProgram& shader_program = Util::getShader(NGIN_SHADER_OBJECT_SHADER);
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    //glClearBufferfv(GL_COLOR, 0, value_ptr(defaults::color_black));
-    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-    glUseProgram(shader_program.program);
+	const Util::ShaderProgram& shader_program = Util::getShader(NGIN_SHADER_OBJECT_SHADER);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	//glClearBufferfv(GL_COLOR, 0, value_ptr(defaults::color_black));
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+	glUseProgram(shader_program.program);
 
-    glm::mat4 view = getViewMatrix(camera);
-    glUniformMatrix4fv(glGetUniformLocation(shader_program.program, "view"), 1, GL_FALSE, glm::value_ptr(view));
+	glm::mat4 view = getViewMatrix(camera);
+	glUniformMatrix4fv(glGetUniformLocation(shader_program.program, "view"), 1, GL_FALSE, glm::value_ptr(view));
 
-    glm::mat4 trans;
+	glm::mat4 trans;
 
-    if (glm::distance(glm::vec3(0), camera.dist) > 1.0f) {
-        trans = translate(camera.pos);
-        glUniformMatrix4fv(glGetUniformLocation(shader_program.program, "model"), 1, GL_FALSE, glm::value_ptr(trans));
-        setMaterial(defaults::solidRed, shader_program.program);
-        Model::render(star);
-    }
+	for (auto kv: Registry::objects.records) {
+		Model::Object3D* object = kv.second.value;
+		trans = translate(object->position);
+		// TODO rotate and scale
+		glUniformMatrix4fv(glGetUniformLocation(shader_program.program, "model"), 1, GL_FALSE, glm::value_ptr(trans));
+		setMaterial(object->material, shader_program.program);
+		Model::render(*object->mesh);
+	}
 
-    trans = glm::translate(lightPosition);
-    glUniformMatrix4fv(glGetUniformLocation(shader_program.program, "model"), 1, GL_FALSE, glm::value_ptr(trans));
-    glutSolidTetrahedron();
-
-    trans = glm::translate(glm::vec3(-4.0f,0,4.0f));
-    glUniformMatrix4fv(glGetUniformLocation(shader_program.program, "model"), 1, GL_FALSE, glm::value_ptr(trans));
-    setMaterial(defaults::solidRed, shader_program.program);
-    Model::render(cube);
-
-    trans = glm::translate(glm::vec3(4.0f, 0, 4.0f));
-    glUniformMatrix4fv(glGetUniformLocation(shader_program.program, "model"), 1, GL_FALSE, value_ptr(trans));
-    setMaterial(defaults::softBlue, shader_program.program);
-    Model::render(pyramid);
-
-    trans = glm::translate(glm::vec3(-4.0f, 0, -4.0f));
-    glUniformMatrix4fv(glGetUniformLocation(shader_program.program, "model"), 1, GL_FALSE, value_ptr(trans));
-    setMaterial(defaults::solidGreen, shader_program.program);
-    Model::render(pyramid);
-
-    trans = glm::translate(glm::vec3(4.0f, 0, -4.0f));
-    glUniformMatrix4fv(glGetUniformLocation(shader_program.program, "model"), 1, GL_FALSE, value_ptr(trans));
-    setMaterial(defaults::softOrange, shader_program.program);
-    Model::render(cube);
-
-    glutSwapBuffers();
+	glutSwapBuffers();
 }
 
 void keyPress(unsigned char key, int, int) {
-    keyPress(key);
-    for (auto record : Registry::key_registry) {
-        if (record.first->key == key) {
-            record.second();
-        }
-    }
+	keyPress(key);
+	for (auto record : Registry::key_registry) {
+		if (record.first->key == key) {
+			record.second();
+		}
+	}
 }
 
 void mouseMove(int x, int y) {
-    mouseMove(x, y, camera);
-    glutPostRedisplay();
+	mouseMove(x, y, camera);
+	glutPostRedisplay();
 }
 
 void special_key(int i, int x, int y) {
@@ -116,35 +92,24 @@ void special_key(int i, int x, int y) {
 }
 
 int main(int argc, char** argv) {
-    init(argc, argv, "preview");
-    glutDisplayFunc(draw);
-    glutTimerFunc(20, update, 0);
-    glutKeyboardFunc(keyPress);
-    glutKeyboardUpFunc(keyPress);
-    glutPassiveMotionFunc(mouseMove);
-    glutMouseFunc(mouseClick);
-    glutSpecialFunc(special_key);
+	init(argc, argv, "preview");
+	glutDisplayFunc(draw);
+	glutTimerFunc(20, update, 0);
+	glutKeyboardFunc(keyPress);
+	glutKeyboardUpFunc(keyPress);
+	glutPassiveMotionFunc(mouseMove);
+	glutMouseFunc(mouseClick);
+	glutSpecialFunc(special_key);
 
-    const Util::ShaderProgram& shader_program = Util::getShader(NGIN_SHADER_OBJECT_SHADER);
+	const Util::ShaderProgram& shader_program = Util::getShader(NGIN_SHADER_OBJECT_SHADER);
 
-    construct_meshes();
-    glm::mat4 projection = getProjectionMatrix(camera);
-    glUseProgram(shader_program.program);
-    glUniformMatrix4fv(glGetUniformLocation(shader_program.program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-    glUniform3fv(glGetUniformLocation(shader_program.program, "light"), 1, value_ptr(lightPosition));
+	glm::mat4 projection = getProjectionMatrix(camera);
+	glUseProgram(shader_program.program);
+	glUniformMatrix4fv(glGetUniformLocation(shader_program.program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+	glUniform3fv(glGetUniformLocation(shader_program.program, "light"), 1, value_ptr(lightPosition));
 
-    glEnable(GL_DEPTH_TEST);
+	glEnable(GL_DEPTH_TEST);
 
-    glutMainLoop();
-    return 0;
-}
-
-void construct_meshes() {
-    const Util::ShaderProgram& shader_program = Util::getShader(NGIN_SHADER_OBJECT_SHADER);
-    //TODO make it pointer values
-    cone    = *Model::meshFromFile("games/preview/meshes/cone.obj", shader_program.program);
-    cube    = *Model::meshFromFile("games/preview/meshes/cube.obj", shader_program.program);
-    star    = *Model::meshFromFile("games/preview/meshes/star.obj", shader_program.program);
-    plane   = *Model::meshFromFile("games/preview/meshes/plane.obj", shader_program.program);
-    pyramid = *Model::meshFromFile("games/preview/meshes/pyramid.obj", shader_program.program);
+	glutMainLoop();
+	return 0;
 }

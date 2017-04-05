@@ -29,17 +29,17 @@ std::map<int, bool> special_keyboard_state;
 std::map<KeyEvent*, output_f> Registry::key_registry;
 
 void keyEvent(unsigned char key, int, int) {
-    keyboard_state[key] = !keyboard_state[key];
+	keyboard_state[key] = !keyboard_state[key];
 }
 
 void specialKeyEvent(int i, int, int) {
-    special_keyboard_state[i] = !special_keyboard_state[i];
+	special_keyboard_state[i] = !special_keyboard_state[i];
 }
 
 void initKeyboard() {
-    glutIgnoreKeyRepeat(1);
-    glutKeyboardFunc(keyEvent);
-    glutKeyboardUpFunc(keyEvent);
-    glutSpecialFunc(specialKeyEvent);
-    glutSpecialUpFunc(specialKeyEvent);
+	glutIgnoreKeyRepeat(1);
+	glutKeyboardFunc(keyEvent);
+	glutKeyboardUpFunc(keyEvent);
+	glutSpecialFunc(specialKeyEvent);
+	glutSpecialUpFunc(specialKeyEvent);
 }

@@ -23,28 +23,28 @@
 
 namespace NGin {
 
-    namespace IO {
+	namespace IO {
 
-        typedef void (*output_f) ();
+		typedef void (*output_f) ();
 
-        struct KeyEvent {
-            unsigned char key;
-            int special_key;
-        };
+		struct KeyEvent {
+			unsigned char key;
+			int special_key;
+		};
 
-        enum MouseEvent {
-            LEFT_MOUSE_CLICK,
-            RIGHT_MOUSE_CLICK,
-            MIDDLE_MOUSE_CLICK,
-            SCROLL
-        };
+		enum MouseEvent {
+			LEFT_MOUSE_CLICK,
+			RIGHT_MOUSE_CLICK,
+			MIDDLE_MOUSE_CLICK,
+			SCROLL
+		};
 
-        struct Camera {
-            Model::Object3D* head;
-            float head_offset;
-        };
+		struct Camera {
+			Model::Object3D* head;
+			float head_offset;
+		};
 
-    }
+	}
 
 }
 

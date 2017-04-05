@@ -21,16 +21,20 @@
 #include "init.h"
 #include "registry.h"
 
-void NGin::init(int argc, char** argv, std::string game) {
-    glutInit(&argc, argv);
-    initWindow();
-    glewInit();
+namespace NGin {
 
-    initShaders();
-    initCamera();
-    initKeyboard();
+	void init(int argc, char** argv, std::string game) {
+		glutInit(&argc, argv);
+		initWindow();
+		glewInit();
 
-    initMeshes();
-    initObjects();
+		initShaders();
+		initCamera();
+		initKeyboard();
+
+		initMeshes();
+		initObjects();
+
+	}
 
 }
