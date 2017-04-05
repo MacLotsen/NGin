@@ -23,6 +23,7 @@
 
 #include "default_values.h"
 #include "registry.h"
+#include <iostream>
 
 using namespace std;
 using namespace NGin;
@@ -98,6 +99,7 @@ int main(int argc, char** argv) {
 	glutKeyboardFunc(keyPress);
 	glutKeyboardUpFunc(keyPress);
 	glutPassiveMotionFunc(mouseMove);
+	glutMotionFunc(mouseMove);
 	glutMouseFunc(mouseClick);
 	glutSpecialFunc(special_key);
 
