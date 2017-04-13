@@ -142,7 +142,7 @@ void updateCamera(Camera& c) {
 	glm::quat pitch = glm::angleAxis(glm::radians(dy), axis);
 	glm::quat yaw = glm::angleAxis(glm::radians(dx), UP);
 
-	glm::quat dir = normalize(cross(pitch, yaw));
+	glm::quat dir = normalize(pitch * yaw);
 
 	c.dir = glm::rotate(dir, c.dir);
 

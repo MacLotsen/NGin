@@ -24,17 +24,15 @@
 
 namespace defaults {
 
-    glm::vec4 color_black(0,0,0,1);
-
     Camera camera = {
             45.0f,  // viewing angle
             800.0f, // viewing width
             600.0f, // viewing height
-            0.1f,   // near plane
+            .1f,    // near plane
             100.0f, // far plane
-            0.3f,   // scroll speed
-            0.3f,   // mouse speed
-            .05f,   // movement speed
+            .3f,    // scroll speed
+            .3f,    // mouse speed
+            .5f,    // movement speed
             glm::vec3(0, 0, 0), // position
             glm::vec3(0, 0, 1), // direction
             glm::vec3(4),// distance of target
@@ -42,6 +40,8 @@ namespace defaults {
 
 
 #if 0
+    glm::vec4 color_black(0,0,0,1);
+
     NGin::Model::Material solidRed {
             glm::vec3(1,.2f,.2f),
             glm::vec3(.2f,.2f,.2f),

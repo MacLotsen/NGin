@@ -30,13 +30,16 @@ using namespace NGin;
 
 Camera camera = defaults::camera;
 
-glm::vec3 lightPosition(0, 1, -6);
+float lightrot = 0;
+glm::vec3 lightPosition(-6, 1, 0);
 
 void update(int delta) {
 	// TODO: reimplement controls
 	updateCamera(camera);
 
-	glutPostRedisplay();
+	glm::vec3 lightd(0, 60.0f, 0);
+	lightd = glm::rotate(lightd, (lightrot+=.001f),glm::vec3(0,0,1));
+	glUniform3fv(glGetUniformLocation(Util::getShader(NGIN_SHADER_OBJECT_SHADER).program, "light"), 1, value_ptr(lightd));
 	glutTimerFunc(20, update, delta + 1);
 };
 
@@ -52,7 +55,7 @@ void resize(int w, int h) {
 
 void draw() {
 	const Util::ShaderProgram& shader_program = Util::getShader(NGIN_SHADER_OBJECT_SHADER);
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClearColor(.53f, .80f, .93f, 1.0f);
 	//glClearBufferfv(GL_COLOR, 0, value_ptr(defaults::color_black));
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	glUseProgram(shader_program.program);
@@ -64,7 +67,7 @@ void draw() {
 
 	for (auto kv: Registry::objects.records) {
 		Model::Object3D* object = kv.second.value;
-		trans = translate(object->position);
+		trans = translate(object->position) * scale(object->scale);
 		// TODO rotate and scale
 		glUniformMatrix4fv(glGetUniformLocation(shader_program.program, "model"), 1, GL_FALSE, glm::value_ptr(trans));
 		setMaterial(object->material, shader_program.program);
